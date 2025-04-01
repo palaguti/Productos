@@ -1,0 +1,32 @@
+﻿@model Producto
+
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h5>Elimiar Producto</h5>
+    </div>
+    <div class="card-body">
+        <form asp-action="Delete" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="Id" value="@Model.Id" type="hidden" />
+            <div class="mb-3">
+                <label asp-for="Nombre" class="form-label"></label>
+                <input asp-for="Nombre" class="form-control" />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            
+                <label asp-for="Precio" class="form-label"></label>
+                <input asp-for="Precio" class="form-control" />
+                <span asp-validation-for="Precio" class="text-danger"></span>
+           
+                <label asp-for="CantidadDisponible" class="form-label"></label>
+                <input asp-for="CantidadDisponible" class="form-control" />
+                <span asp-validation-for="CantidadDisponible" class="text-danger"></span>
+           
+                <label asp-for="FechaCreacion" class="form-label"></label>
+                <input asp-for="FechaCreacion" class="form-control" />
+                <span asp-validation-for="FechaCreacion" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-success">Eliminar</button>
+        </form>
+    </div>
+
+</div>

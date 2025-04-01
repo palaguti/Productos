@@ -1,0 +1,26 @@
+﻿@model CompraFiltros
+
+<h2>Reporte de compras</h2>
+
+<form asp-action="DescargarReporte" method="get">
+    <div>
+        <label for="FechaInicio">Fecha Inicio:</label>
+        <input type="date" id="FechaInicio" name="FechaInicio" class="form-control" required />
+    </div>
+
+    <div>
+        <label for="FechaFin">Fecha Fin:</label>
+        <input type="date" id="FechaFin" name="FechaFin" class="form-control" required />
+    </div>
+
+    <div>
+        <label for="TipoReporte">Tipo de Reporte:</label>
+        <select id="TipoReporte" name="TipoReporte" class="form-control">
+            <option value="1">PDF</option>
+            <option value="2">Excel</option>
+        </select>
+    </div>
+
+    <br />
+    <button type="submit" class="btn btn-primary">Generar Reporte</button>
+</form>

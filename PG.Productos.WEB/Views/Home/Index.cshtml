@@ -1,0 +1,146 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+
+    <div class="row">
+        <div class="col-md-6 col-lg-3 p-2">
+            <div class="card">
+                <div class="card-header">
+                    Gráfico de Pastel
+                </div>
+                <div class="card-body">
+                    <canvas id="graficoPastel" style="max-width: 100%; height:250px;"></canvas>
+                </div>
+                <div class="card-footer">
+                    Stock de Productos
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3 p-2">
+            <div class="card">
+                <div class="card-header">
+                    Gráfico de Barra
+                </div>
+                <div class="card-body">
+                    <canvas id="graficoBarra" style="max-width:100%; height:250px;"></canvas>
+                </div>
+                <div class="card-footer">
+                    Promedio de Precio
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let chartInstancePastel = null;
+    let chartInstanceBarra = null;
+
+    function cargarGraficaPastel() {
+        fetch('/Productos/ProductosJson')
+            .then(response => response.json())
+            .then(data => {
+                if (!data || data.length === 0) {
+                    console.warn("No hay datos para la gráfica de pastel");
+                    return;
+                }
+
+                const nombres = data.map(p => p.nombre);
+                const cantidades = data.map(p => p.stok);
+
+                var ctx = document.getElementById('graficoPastel').getContext('2d');
+
+                if (chartInstancePastel) {
+                    chartInstancePastel.destroy();
+                }
+
+                const backgroundColors = nombres.map(() =>
+                    `hsl(${Math.floor(Math.random() * 360)}, 70%, 60%)`
+                );
+
+                chartInstancePastel = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: nombres,
+                        datasets: [{
+                            label: 'Stock de Productos',
+                            data: cantidades,
+                            backgroundColor: backgroundColors,
+                            borderColor: 'rgba(255, 255, 255, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => console.error('Error obteniendo los datos:', error));
+
+    }
+
+    function cargarGraficaBarra(){
+        fetch('/Productos/ProductosJsonPrecio')
+            .then(response => response.json())
+            .then(data => {
+                const fechas = data.map(p => p.fecha);
+                const precios = data.map(p => p.precioPromedio);
+
+                var ctx = document.getElementById('graficoBarra').getContext('2d');
+
+                if (chartInstanceBarra){
+                    chartInstanceBarra.destroy();
+                }
+
+                const borderColors = fechas.map(() =>
+                    `hsl(${Math.floor(Math.random() * 360)}, 70%, 60%)`
+                );
+                const backgroundColors = fechas.map(() =>
+                    `hsl(${Math.floor(Math.random() * 360)}, 70%, 80%)`
+                );
+
+                chartInstanceBarra = new Chart(ctx, {
+                    type: 'bar',
+                    data:{
+                        labels: fechas,
+                        datasets: [{
+                            label: 'Precio promedio de productos',
+                            data: precios,
+                            fill: false,
+                            backgroundColor: backgroundColors,
+                            borderColor: borderColors,
+                            tension: 0.1,
+                            borderWidth: 1
+                        }]
+                    },
+                    options:{
+                        plugins:{
+                            legend:{
+                                position:'top'
+                            },
+                            tooltip:{
+                                callbacks:{
+                                    label: function(tooltipItem){
+                                        return `Precio Promedio: ${tooltipItem.raw}`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => console.error('Error obteniendo los datos:', error));
+    }
+
+    document.addEventListener("DOMContentLoaded", function(){
+        cargarGraficaPastel();
+        cargarGraficaBarra();
+    });
+</script>

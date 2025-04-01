@@ -1,0 +1,43 @@
+﻿@model List<Compra>
+
+<form method="get" class="form-inline">
+    <div class="form-group">
+        <label for="estado">Estado:</label>
+        @Html.DropDownList("estado", (SelectList)ViewBag.Estados, new{ @class = "form-control"})
+    </div>
+    <button type="submit" class="btn btn-primary" >Buscar</button>
+</form>
+<br />
+<div>
+    <a href="@Url.Action("Create", "Compra")" class="btn btn-success">Crear compra</a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Proveedor</th>
+            <th>Fecha</th>
+            <th>Total</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var compra in Model)
+        {
+            <tr>
+                <td>@compra.Proveedor.Nombre</td>
+                <td>@compra.FechaCompra.ToShortDateString()</td>
+                <td>@compra.Total</td>
+                <td>@(compra.Estado == 1 ? "Activa": "Anulada")</td>
+                <td>
+                    <a href="@Url.Action("Detalles", "Compra", new {id = compra.Id})" class="btn btn-info">Ver detalles</a>
+                    @if (compra.Estado == 1){
+                       
+                        <a href="@Url.Action("Anular", "Compra", new {id = compra.Id})" class="btn btn-danger">Anular</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

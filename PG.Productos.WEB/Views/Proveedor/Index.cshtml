@@ -1,0 +1,52 @@
+﻿@model List<Proveedor>
+<h1>Lista de proveedores</h1>
+<div>
+    <a asp-controller="Proveedor" asp-action="ReporteProveedores" class="btn btn-success">Generar PDF</a>
+    <a asp-controller="Proveedor" asp-action="ReporteProductosExcel" class="btn btn-success">Generar Excel </a>
+    <a asp-controller="Proveedor" asp-action="create" class="btn btn-primary">Nuevo</a>
+    <br />
+    <br />
+    <div class="card">
+        <form asp-action="SubirExcelProveedor" asp-controller="Proveedor" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="archivoExcel">Subir Excel</label>
+                <input type="file" name="archivoExcel" required />
+            </div>
+            <br />
+            <button type="submit" class="btn btn-primary">Subir y guardar</button>
+        </form>
+    </div>
+    <br />
+    <br />
+    @if (Model != null)
+    {
+        <table class=" table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <td>Nombre</td>
+                    <td>NRC</td>
+                    <td>Direccion</td>
+                    <td>Telefono</td>
+                    <td>Email</td>
+                    <td>Acciones</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var proveedor in Model)
+                {
+                    <tr>
+                        <th>@proveedor.Nombre</th>
+                        <th>@proveedor.NRC</th>
+                        <th>@proveedor.Direccion</th>
+                        <th>@proveedor.Telefono</th>
+                        <th>@proveedor.Email</th>
+                        <th>
+                            <a class="btn btn-primary" asp-contproveedorler="Proveedor" asp-action="Edit" asp-route-id="@proveedor.Id">Editar</a>|
+                            <a class="btn btn-danger" asp-contproveedorler="Proveedor" asp-action="Delete" asp-route-id="@proveedor.Id">Eliminar</a>
+                        </th>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

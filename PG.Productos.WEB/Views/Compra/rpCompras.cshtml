@@ -1,0 +1,58 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Reporte de Compras</title>
+</head>
+<body>
+    <h2 style="text-align:center;">Reporte de Compras</h2>
+    <table border="1" width="100%" cellspacing="0" cellpadding="5">
+        <thead>
+            <tr>
+                <th>Fecha de Compra</th>
+                <th>Proveedor</th>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>SubTotal</th>
+                <th>Total de la Compra</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int totalCantidad = 0;
+                decimal totalSubTotal = 0;
+                decimal totalGeneral = 0;
+            }
+            @foreach(var compra in Model)
+            {
+                int detallesCount = compra.DetalleCompras.Count;
+                bool primeraFila = true;
+
+                foreach (var detalle in compra.DetalleCompras)
+                {
+                    totalCantidad += detalle.Cantidad;
+                    totalSubTotal += detalle.SubTotal;
+                    totalGeneral += detalle.Total;
+
+                    <tr>
+                        @if (primeraFila)
+                        {
+                            <td rowspan="@detallesCount">@compra.FechaCompra.ToString("yyyy-MM-dd")</td>
+                            <td rowspan="@detallesCount">@(compra.Proveedor?.Nombre ?? "N/A")</td>
+                            primeraFila = false;
+
+                        }
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </body>
+</html>
+{
+
+}

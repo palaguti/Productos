@@ -1,0 +1,42 @@
+﻿@model Proveedor
+
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h5>Editar Proveedor</h5>
+    </div>
+    <div class="card-body">
+        <form asp-action="Edit" method="post">
+            <input asp-for="Id" class="form-control" value="@Model.Id" type="hidden" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="row">
+                    <div class="mb-3">
+                        <label asp-for="Nombre" class="form-label"></label>
+                        <input asp-for="Nombre" class="form-control" />
+                        <span asp-validation-for="Nombre" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="NRC" class="form-label"></label>
+                        <input asp-for="NRC" class="form-control" />
+                        <span asp-validation-for="NRC" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Direccion" class="form-label"></label>
+                        <input asp-for="Direccion" class="form-control" />
+                        <span asp-validation-for="Direccion" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Telefono" class="form-label"></label>
+                        <input asp-for="Telefono" class="form-control" />
+                        <span asp-validation-for="Telefono" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                </div>
+            <button type="submit" class="btn btn-success">Guardar cambios</button>
+        </form>
+    </div>
+
+</div>

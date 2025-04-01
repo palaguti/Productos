@@ -1,0 +1,159 @@
+﻿@model PG.Productos.EN.Compra
+
+@{
+    ViewData["Title"] = "Crear compra";
+    var productos = ViewBag.Productos as List<Producto>;
+}
+<div class="container mt-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-dark text-white text-center">
+            <h3 class="mb-0">Factura de compra</h3>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" method="post">
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Proveedor</label>
+                    <select id="ProveedorId" name="IdProveedor" class="form-select" required>
+                        <option value="">Seleccione un proveedor</option>
+                        @foreach (var item in ViewBag.Proveedores)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="card bg-light shadow-sm p-3">
+                    <h5 class="fw-bold">Agregar producto</h5>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label class="form-label">Producto</label>
+                            <select id="productoSeleccionado" class="form-select">
+                                <option value="">Seleccione un producto</option>
+                                @foreach (var p in productos)
+                                {
+                                    <option value="@p.Id" data-precio="@p.Precio" data-stock="@p.CantidadDisponible">@p.Nombre</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Cantidad</label>
+                            <input type="number" id="cantidadSeleccionada" class="form-control" min="1" value="1" />
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Precio</label>
+                            <input type="number" id="precioSeleccionado" class="form-control text-end" readonly  />
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Stock</label>
+                            <input type="number" id="stockSeleccionado" class="form-control text-center" readonly  />
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Subtotal</label>
+                            <input type="number" id="subtotalSeleccionado" class="form-control text-end bg-light fw-bold" readonly  />
+                        </div>
+                        <div class="col-md-12 mt-2 text-end">
+                            <button type="button" id="agregarProducto" class="btn btn-success shadow-sm">
+                                Agregar al detalle
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <h5 class="fw-bold">Detalles de compra</h5>
+                    <table class="table table-bordered table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Producto</th>
+                                <th class="text-center">Cantidad</th>
+                                <th class="text-end">Precio</th>
+                                <th class="text-end">Subtotal</th>
+                                <th class="text-center">Accion</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaProductos">
+
+                        </tbody>
+                    </table> 
+                </div>
+                <div class="text-end mt-3">
+                    <label class="h4 fw-bold text-primary">Total:</label>
+                    <input type="text " id="total" name="Total" class="form-controlfw-bold text-end text-white bg-primary" readonly />
+                </div>
+                <div class="text-center mt-3">
+                    <button type="submit" class="btn btn-primary btn-lg shadow-sm">
+                        Guardar Compra
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        let index = 0;
+
+        document.getElementById("productoSeleccionado").addEventListener("change", function(){
+            let selectedOption = this.selectedOptions[0];
+            document.getElementById("precioSeleccionado").value = selectedOption.dataset.precio || 0;
+            document.getElementById("stockSeleccionado").value = selectedOption.dataset.stock || 0;
+            calcularSubtotalSeleccionado();
+        });
+
+        document.getElementById("cantidadSeleccionada").addEventListener("input", calcularSubtotalSeleccionado);
+
+        function calcularSubtotalSeleccionado()
+        {
+            let cantidad = document.getElementById("cantidadSeleccionada").value || 0;
+            let precio = document.getElementById("precioSeleccionado").value || 0;
+            let subtotal = cantidad * precio;
+
+            document.getElementById("subtotalSeleccionado").value = subtotal.toFixed(2);
+        }
+
+        document.getElementById("agregarProducto").addEventListener("click", function (){
+            let selectProducto = document.getElementById("productoSeleccionado");
+            let idProducto = selectProducto.value;
+            let nombreProducto = selectProducto.selectedOptions[0].text;
+            let cantidad = document.getElementById("cantidadSeleccionada").value || 0;
+            let precio = document.getElementById("precioSeleccionado").value ||0;
+            let subtotal = document.getElementById("subtotalSeleccionado").value || 0;
+
+            if(!idProducto || cantidad <= 0 || precio <= 0){
+                alert("Seleccione un producto y verifique los valores");
+                return;
+            }
+
+            let tbody = document.querySelector("#tablaProductos");
+            let tr = document.createElement("tr");
+
+            tr.innerHTML = `
+                        <td>${nombreProducto}<input type="hidden" name="DetalleCompras[${index}].IdProducto" value="${idProducto}"></td>
+                        <td class="text-center"><input type="number" name="DetalleCompras[${index}].Cantidad" class="form-control cantidad text-center" min="1" value="${cantidad}"></td>
+                        <td class="text-end"><input type="text" name="DetalleCompras[${index}].PrecioUnitario" class="form-control precio text-end" value="${precio}"></td>
+                        <td class="text-end"><input type="text" name="DetalleCompras[${index}].SubTotal" class="form-control subtotal text-end fw-bold" value="${subtotal}" readonly></td>
+                        <td class="text-center"><buton type="button" class="btn btn-danger btnEliminar">🗑</button></td>
+            `;
+
+            tbody.appendChild(tr);
+            index++;
+            calcularTotal();
+        });
+
+        document.addEventListener("click", function (event){
+            if (event.target.classList.contains("btnEliminar")){
+                event.targetclosest("tr").remove();
+                calcularTotal();
+            }
+        });
+
+        function calcularTotal(){
+            let total = 0;
+            document.querySelectorAll(".subtotal").forEach(sub => {
+                total += parseFloat(sub.value) || 0;
+            });
+            document.getElementById("total").value = total.toFixed(2);
+        }
+    </script>
+}
