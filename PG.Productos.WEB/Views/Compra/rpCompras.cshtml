@@ -24,7 +24,7 @@
         <tbody>
             @{
                 int totalCantidad = 0;
-                decimal totalSubTotal = 0;
+                decimal totalSubTtal = 0;
                 decimal totalGeneral = 0;
             }
             @foreach(var compra in Model)
@@ -35,7 +35,7 @@
                 foreach (var detalle in compra.DetalleCompras)
                 {
                     totalCantidad += detalle.Cantidad;
-                    totalSubTotal += detalle.SubTotal;
+                    totalSubTtal += detalle.SubTtal;
                     totalGeneral += detalle.Total;
 
                     <tr>
@@ -44,15 +44,23 @@
                             <td rowspan="@detallesCount">@compra.FechaCompra.ToString("yyyy-MM-dd")</td>
                             <td rowspan="@detallesCount">@(compra.Proveedor?.Nombre ?? "N/A")</td>
                             primeraFila = false;
-
                         }
+                        <td>@(detalle.Producto?.Nombre ?? "N/A")</td>
+                        <td>@detalle.Cantidad</td>
+                        <td>@detalle.SubTtal</td>
+                        <td>@compra.Total</td>
                     </tr>
                 }
             }
             </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" style="text-align: right; font-weight: bold;">Totales</td>
+                    <td>@totalCantidad</td>
+                    <td>@totalSubTtal</td>
+                    <td>@totalGeneral</td>
+                </tr>
+            </tfoot>
         </table>
     </body>
 </html>
-{
-
-}

@@ -188,6 +188,7 @@ namespace PG.Productos.WEB.Controllers
             }
             return BadRequest("Formato no valido");
         }
+
         [HttpGet]
         public IActionResult ReporteCompras()
         {

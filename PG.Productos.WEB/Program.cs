@@ -1,6 +1,8 @@
 using PG.Productos.DAL;
 using Microsoft.EntityFrameworkCore;
 using PG.Productos.BL;
+System.Globalization.CultureInfo culture = System.Globalization.CultureInfo.InvariantCulture;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ProductosDBContext>( options =>

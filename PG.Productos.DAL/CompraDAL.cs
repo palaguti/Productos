@@ -94,12 +94,13 @@ namespace PG.Productos.DAL
 
             if (filtro.FechaInicio.HasValue)
             {
-                DateTime fechaInicio = filtro.FechaInicio.Value.Date;
+
+                DateTime fechaInicio = filtro.FechaInicio.Value.Date.ToUniversalTime();
                 comprasQuery = comprasQuery.Where(c => c.FechaCompra >= fechaInicio);
             }
             if (filtro.FechaFin.HasValue)
             {
-                DateTime fechaFin = filtro.FechaFin.Value.Date.AddDays(1).AddSeconds(-1);
+                DateTime fechaFin = filtro.FechaFin.Value.Date.AddDays(1).AddSeconds(-1).ToUniversalTime();
                 comprasQuery = comprasQuery.Where(c => c.FechaCompra >= fechaFin);
             }
             return await comprasQuery.ToListAsync();

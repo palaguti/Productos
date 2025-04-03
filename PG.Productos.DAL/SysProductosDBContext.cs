@@ -16,8 +16,12 @@ namespace PG.Productos.DAL
 
         public DbSet<Producto> producto { get; set; }
         public DbSet<Proveedor>proveedores { get; set; }
+        public DbSet<Cliente> Clientes { get; set; }
+        public DbSet<Venta> venta { get; set; }
+        public DbSet<DetalleVenta> DetalleVentas { get; set; }
         public DbSet<Compra> Compras { get; set; }
         public DbSet<DetalleCompra> DetalleCompras { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,6 +32,7 @@ namespace PG.Productos.DAL
 
             base.OnModelCreating(modelBuilder);
         }
+
     }
 
 

@@ -34,6 +34,7 @@ namespace PG.Productos.EN
         public decimal SubTtal {  get; set; }
         public virtual Compra? Compra {  get; set; }
         public virtual Producto? Producto {  get; set; }
+        
     }
    
 }
