@@ -16,7 +16,7 @@ namespace PG.Productos.DAL
 
         public DbSet<Producto> producto { get; set; }
         public DbSet<Proveedor>proveedores { get; set; }
-        public DbSet<Cliente> Clientes { get; set; }
+        public DbSet<Cliente> cliente { get; set; }
         public DbSet<Venta> venta { get; set; }
         public DbSet<DetalleVenta> DetalleVentas { get; set; }
         public DbSet<Compra> Compras { get; set; }
@@ -31,7 +31,14 @@ namespace PG.Productos.DAL
                 .HasForeignKey(d => d.IdCompra);
 
             base.OnModelCreating(modelBuilder);
+
+            // Configuración de la relación entre Venta y DetalleVenta
+            modelBuilder.Entity<DetalleVenta>()
+                .HasOne(dv => dv.Venta) // Relación con la entidad Venta
+                .WithMany(v => v.DetalleVentas) // Cada Venta tiene varios DetalleVentas
+                .HasForeignKey(dv => dv.IdVenta); // La clave foránea en DetalleVenta
         }
+
 
     }
 

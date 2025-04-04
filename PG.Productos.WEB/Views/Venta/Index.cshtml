@@ -1,0 +1,45 @@
+﻿@model List<Venta>
+
+<form method="get" class="form-inline">
+    <div class="form-group">
+        <label for="estado">Estado:</label>
+        @Html.DropDownList("estado", (SelectList)ViewBag.Estados, new { @class = "form-control" })
+    </div>
+    <button type="submit" class="btn btn-primary">Buscar</button>
+</form>
+<br />
+<div>
+    <a href="@Url.Action("Create", "Venta")" class="btn btn-success">Crear venta</a>
+    <a asp-controller="Venta" asp-action="ReporteVenta" class="btn btn-dark">Generar Reportes</a>
+</div>
+<br />
+<table class="table">
+    <thead>
+        <tr>
+            <th>Cliente</th>
+            <th>Fecha</th>
+            <th>Total</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var venta in Model)
+        {
+            <tr>
+                <td>@venta.Cliente.Nombre</td>
+                <td>@venta.FechaVenta.ToShortDateString()</td>
+                <td>@venta.Total</td>
+                <td>@(venta.Estado == 1 ? "Activa" : "Anulada")</td>
+                <td>
+                    <a href="@Url.Action("Detalles", "Venta", new {id = venta.Id})" class="btn btn-info">Ver detalles</a>
+                    @if (venta.Estado == 1)
+                    {
+
+                        <a href="@Url.Action("Anular", "Venta", new {id = venta.Id})" class="btn btn-danger">Anular</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

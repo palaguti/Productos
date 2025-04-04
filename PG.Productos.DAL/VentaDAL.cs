@@ -28,7 +28,7 @@ namespace PG.Productos.DAL
                     var productos = await dbContext.producto.FirstOrDefaultAsync(p => p.Id == detalle.IdProducto);
                     if (productos != null)
                     {
-                        productos.CantidadDisponible += detalle.Cantidad;
+                        productos.CantidadDisponible -= detalle.Cantidad;
                     }
                 }
             }
@@ -39,16 +39,16 @@ namespace PG.Productos.DAL
             var venta = await dbContext.venta
                 .Include(c => c.DetalleVentas)
                 .FirstOrDefaultAsync(c => c.Id == idVenta);
-            if (venta != null && venta.Estado != (byte)Compra.EnumEstadoCompra.Anulada)
+            if (venta != null && venta.Estado != (byte)Venta.EnumEstadoVentas.Anulada)
             {
-                venta.Estado = (byte)Compra.EnumEstadoCompra.Anulada;
+                venta.Estado = (byte)Venta.EnumEstadoVentas.Anulada;
 
                 foreach (var detalle in venta.DetalleVentas)
                 {
                     var producto = await dbContext.producto.FirstOrDefaultAsync(p => p.Id == detalle.IdProducto);
                     if (producto != null)
                     {
-                        producto.CantidadDisponible -= detalle.Cantidad;
+                        producto.CantidadDisponible += detalle.Cantidad;
                     }
                 }
                 return await dbContext.SaveChangesAsync();
@@ -71,15 +71,15 @@ namespace PG.Productos.DAL
         }
         public async Task<List<Venta>> ObtenerPorEstadoAsync(byte estado)
         {
-            var comprasQuery = dbContext.venta.AsQueryable();
+            var ventasQuery = dbContext.venta.AsQueryable();
             if (estado != 0)
             {
-                comprasQuery = comprasQuery.Where(c => c.Estado == estado);
+                ventasQuery = ventasQuery.Where(c => c.Estado == estado);
             }
-            comprasQuery = comprasQuery
+            ventasQuery = ventasQuery
                 .Include(c => c.DetalleVentas)
                 .Include(c => c.Cliente);
-            var venta = await comprasQuery.ToListAsync();
+            var venta = await ventasQuery.ToListAsync();
 
             return venta ?? new List<Venta>();
 

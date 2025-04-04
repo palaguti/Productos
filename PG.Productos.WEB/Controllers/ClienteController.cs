@@ -96,7 +96,7 @@ namespace PG.Productos.WEB.Controllers
         public async Task<ActionResult> ReporteCliente()
         {
             var clientes = await _clienteBL.ObtenerTodosAsync();
-            return new ViewAsPdf("rpClientes", clientes);
+            return new ViewAsPdf("rpCliente", clientes);
         }
 
         public async Task<JsonResult> ClientesJson()

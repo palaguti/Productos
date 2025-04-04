@@ -16,24 +16,27 @@ namespace PG.Productos.DAL
         {
             _dbContext = sysProductosDB;
         }
-
-        public async Task<int> CrearAsync(Cliente pCliente)
-        {
-            Cliente cliente = new Cliente()
-            {
-                Nombre = pCliente.Nombre,
-                Telefono = pCliente.Telefono,
-                Correo = pCliente.Correo,
+        public async Task<int> CrearAsync(Cliente pCliente) 
+        { 
+            Cliente cliente = new Cliente() 
+            { 
+               Nombre = pCliente.Nombre, 
+               Telefono = pCliente.Telefono, 
+               Correo = pCliente.Correo, 
             };
-            _dbContext.Clientes.Add(cliente);
+
+            _dbContext.cliente.Add(cliente);
             return await _dbContext.SaveChangesAsync();
         }
+
+
+
         public async Task<int> EliminarAsync(Cliente pCliente)
         {
-            var cliente = await _dbContext.proveedores.FirstOrDefaultAsync(s => s.Id == pCliente.Id);
+            var cliente = await _dbContext.cliente.FirstOrDefaultAsync(s => s.Id == pCliente.Id);
             if (cliente != null && cliente.Id != 0)
             {
-                _dbContext.proveedores.Remove(cliente);
+                _dbContext.cliente.Remove(cliente);
                 return await _dbContext.SaveChangesAsync();
             }
             else
@@ -41,7 +44,7 @@ namespace PG.Productos.DAL
         }
         public async Task<int> ModificarAsync(Cliente pCliente)
         {
-            var cliente = await _dbContext.Clientes.FirstOrDefaultAsync(s => s.Id == pCliente.Id);
+            var cliente = await _dbContext.cliente.FirstOrDefaultAsync(s => s.Id == pCliente.Id);
             if (cliente != null && cliente.Id != 0)
             {
                 cliente.Nombre = pCliente.Nombre;
@@ -56,7 +59,7 @@ namespace PG.Productos.DAL
         }
         public async Task<Cliente> ObtenerPorIdAsync(Cliente pCliente)
         {
-            var cliente = await _dbContext.Clientes.FirstOrDefaultAsync(s => s.Id == pCliente.Id);
+            var cliente = await _dbContext.cliente.FirstOrDefaultAsync(s => s.Id == pCliente.Id);
             if (cliente != null && cliente.Id != 0)
             {
                 return new Cliente
@@ -74,7 +77,7 @@ namespace PG.Productos.DAL
         }
         public async Task<List<Cliente>> ObtenerTodosAsync()
         {
-            var clientes = await _dbContext.Clientes.ToListAsync();
+            var clientes = await _dbContext.cliente.ToListAsync();
             if (clientes != null && clientes.Count > 0)
             {
                 var list = new List<Cliente>();
@@ -94,7 +97,7 @@ namespace PG.Productos.DAL
         }
         public async Task AgregarTodosAsync(List<Cliente> pCliente)
         {
-            await _dbContext.Clientes.AddRangeAsync(pCliente);
+            await _dbContext.cliente.AddRangeAsync(pCliente);
             await _dbContext.SaveChangesAsync();
         }
 

@@ -17,7 +17,7 @@ namespace PG.Productos.EN
         public DateTime FechaVenta { get; set; }
 
         [Required(ErrorMessage = "El cliente es obligatorio")]
-        [ForeignKey("Proveedor")]
+        [ForeignKey("Cliente")]
 
         public int IdCliente { get; set; }
 
@@ -31,10 +31,9 @@ namespace PG.Productos.EN
 
         public virtual Cliente? Cliente { get; set; }
 
-        public virtual ICollection<DetalleCompra>? DetalleCompras { get; set; }
         public virtual ICollection<DetalleVenta>? DetalleVentas { get; set; }
 
-        public enum EnumEstadoCompra
+        public enum EnumEstadoVentas
         {
             Activa = 1,
             Anulada = 2,

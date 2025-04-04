@@ -1,0 +1,49 @@
+﻿@model List<Cliente>
+<h1>Lista de Clientes</h1>
+<div>
+    <a asp-controller="Cliente" asp-action="Create" class="btn btn-primary">Nuevo</a>
+    <a asp-controller="Cliente" asp-action="ReporteCliente" class="btn btn-success">Generar PDF</a>
+    <a asp-action="ReporteClientesExcel" class="btn btn-dark">Generar Excel</a>
+
+    <br />
+    <br />
+
+    <div class="card" style=" border: none;">
+        <form asp-action="SubirExcelCliente" asp-controller="Cliente" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="archivoExcel">Subir Excel</label>
+                <input type="file" name="archivoExcel" required />
+            </div>
+            <button type="submit" class="btn btn-primary">Subir Archivo</button>
+        </form>
+    </div>
+
+    <br />
+    @if (Model != null)
+    {
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <td>Nombre</td>
+                    <td>Telefono</td>
+                    <td>Correo</td>
+                    <td>Acciones</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var cliente in Model)
+                {
+                    <tr>
+                        <th>@cliente.Nombre</th>
+                        <th>@cliente.Telefono</th>
+                        <th>@cliente.Correo</th>
+                        <th>
+                            <a class="btn btn-primary" asp-contproveedorler="Proveedor" asp-action="Edit" asp-route-id="@cliente.Id">Editar</a>|
+                            <a class="btn btn-danger" asp-contproveedorle="Proveedor" asp-action="Delete" asp-route-id="@cliente.Id">Eliminar</a>
+                        </th>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
