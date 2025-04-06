@@ -3,10 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using OfficeOpenXml;
 using PG.Productos.BL;
+using PG.Productos.DAL;
 using PG.Productos.EN.Filtros;
 using PG.Productos.EN;
 using Rotativa.AspNetCore;
-using static PG.Productos.EN.Filtros.CompraFiltros;
+using static PG.Productos.EN.Filtros.VentaFiltros;
 using static PG.Productos.EN.Venta;
 
 namespace PG.Productos.WEB.Controllers
@@ -191,9 +192,9 @@ namespace PG.Productos.WEB.Controllers
         }
         [HttpGet]
 
-        public async Task<IActionResult> DescargarReporte(CompraFiltros filtro)
+        public async Task<IActionResult> DescargarReporte(VentaFiltros filtro)
         {
-            var ventas = await ventaBL.ObtenerReporteComprasAsync(filtro);
+            var ventas = await ventaBL.ObtenerReporteVentasAsync(filtro);
 
             if (filtro.TipoReporte == (byte)EnumTipoReporte.PDF)
             {

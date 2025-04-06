@@ -37,9 +37,9 @@ namespace PG.Productos.BL
         {
             return await ventaDAL.ObtenerPorEstadoAsync(estado);
         }
-        public async Task<List<Venta>> ObtenerReporteComprasAsync(CompraFiltros filtro)
+        public async Task<List<Venta>> ObtenerReporteVentasAsync(VentaFiltros filtro)
         {
-            return await ventaDAL.ObtenerReporteComprasAsync(filtro);
+            return await ventaDAL.ObtenerReporteVentasAsync(filtro);
         }
 
     }

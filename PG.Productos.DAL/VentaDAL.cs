@@ -84,7 +84,7 @@ namespace PG.Productos.DAL
             return venta ?? new List<Venta>();
 
         }
-        public async Task<List<Venta>> ObtenerReporteComprasAsync(CompraFiltros filtro)
+        public async Task<List<Venta>> ObtenerReporteVentasAsync(VentaFiltros filtro)
         {
             var comprasQuery = dbContext.venta
                 .Include(c => c.DetalleVentas)
